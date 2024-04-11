@@ -1,15 +1,16 @@
 import {useState} from "react";
+import {useDispatch} from 'react-redux';
+import {editTodo} from "../store/todosSlice";
 import {MdTask} from "react-icons/md";
-import useApisContext from "../hooks/use-apis-context";
 
 function TodoEdit({todo, onSubmit}) {
+  const dispatch = useDispatch();
   const [title, setTitle] = useState(todo.title);
-  const {editTodo} = useApisContext();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const updatedTodo = {...todo, title};
-    editTodo(updatedTodo);
+    dispatch(editTodo(updatedTodo));
     onSubmit();
   };
 

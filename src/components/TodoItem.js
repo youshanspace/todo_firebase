@@ -1,24 +1,25 @@
 import {useState} from "react";
+import {useDispatch} from 'react-redux';
 import {MdModeEdit, MdDelete} from "react-icons/md";
+import {editTodo, deleteTodo} from "../store/todosSlice";
 import TodoEdit from "./TodoEdit";
-import useApisContext from "../hooks/use-apis-context";
 
 function TodoItem({todo}) {
+  const dispatch = useDispatch();
   const [isCompleted, setIsCompleted] = useState(todo.completed);
   const [edit, setEdit] = useState(false);
-  const {editTodo, deleteTodo} = useApisContext();
-
+  
   const handleTitleEdit = () => {
     setEdit(!edit);
   };
 
   const handleDelete = () => {
-    deleteTodo(todo.id);
+    dispatch(deleteTodo(todo.id));
   };
 
   const handleCheckboxChange = () => {
     const updatedTodo = {...todo, completed: !isCompleted};
-    editTodo(updatedTodo);
+    dispatch(editTodo(updatedTodo));
     setIsCompleted(!isCompleted);
   };
 

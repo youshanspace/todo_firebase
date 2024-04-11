@@ -1,12 +1,12 @@
 import {useState} from "react";
-import useApisContext from "../hooks/use-apis-context";
+import {useSelector} from 'react-redux';
 import TodoItem from "./TodoItem";
 
 function TodoList() {
   const [activeTab, setActiveTab] = useState("all");
-  const {todos} = useApisContext();
   const tabs = ["all", "active", "completed"];
-
+  const todos = useSelector((state) => state.todos.data);
+  
   const handleClick = (tabState) => {
     setActiveTab(tabState);
   };
@@ -41,9 +41,9 @@ function TodoList() {
     <div className="todo-list-outer-container">
       <div className="todo-list-container">
         <div className="todo-list-header">{renderedTabs}</div>
-        {currentTabTodos.map((todo) => (
-          <TodoItem key={todo.id} todo={todo} />
-        ))}
+        {currentTabTodos.length > 0 && currentTabTodos.map((todo) => (
+           <TodoItem key={todo.id} todo={todo} />
+         ))}
         <div className="todo-count">
           <span>{currentTabTodos.length}</span>
           <span>items</span>

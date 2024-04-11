@@ -1,10 +1,11 @@
-import useApisContext from "../hooks/use-apis-context";
+import {useDispatch} from 'react-redux';
 import {useState} from "react";
+import {addTodo} from '../store/todosSlice';
 import {IoAdd} from "react-icons/io5";
 
 function InputForm() {
+  const dispatch = useDispatch();
   const [input, setInput] = useState("");
-  const {createTodo} = useApisContext();
 
   const handleChange = (e) => {
     setInput(e.target.value);
@@ -13,7 +14,8 @@ function InputForm() {
   const handelSubmit = (e) => {
     e.preventDefault();
     if (input.trim() !== "") {
-      createTodo(input);
+      const newTodo = { title: input, completed: false, createdTime: new Date().toISOString() };
+      dispatch(addTodo(newTodo));
     }
     setInput("");
   };
