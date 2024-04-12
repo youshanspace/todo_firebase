@@ -10,7 +10,7 @@
 - 刪除待辦
 - 重整頁面後儲存待辦
 
-#### 前端
+#### 本地端測試
 
 ##### Node.js
 
@@ -32,21 +32,5 @@ npm install
 npm start
 ```
 
-#### 後端
-
-##### 採用 json-server 儲存 todo-list 資料
-
-- 於根目錄下新增一檔案 "db.json"
-- db.json 檔案內容新增：
-
-```
-{
-  "todos": []
-}
-```
-
-- 於終端機輸入下列指令，運行後端 json server
-
-```
-npm run server
-```
+#### 線上版網頁
+https://todos-b6c17.web.app/
