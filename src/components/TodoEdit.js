@@ -1,6 +1,6 @@
 import {useState} from "react";
 import {useDispatch} from 'react-redux';
-import {editTodo} from "../store/todosSlice";
+import {editTodo} from "../store";
 import {MdTask} from "react-icons/md";
 
 function TodoEdit({todo, onSubmit}) {

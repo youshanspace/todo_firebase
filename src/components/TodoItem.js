@@ -1,7 +1,7 @@
 import {useState} from "react";
 import {useDispatch} from 'react-redux';
 import {MdModeEdit, MdDelete} from "react-icons/md";
-import {editTodo, deleteTodo} from "../store/todosSlice";
+import {editTodo, deleteTodo} from "../store";
 import TodoEdit from "./TodoEdit";
 
 function TodoItem({todo}) {

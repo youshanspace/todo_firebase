@@ -83,7 +83,7 @@ svg {
   display: inline-block;
   position: relative;
   margin: 0 auto;
-  min-width: 180px;
+  width: 180px;
   height: 60px;
   line-height: 60px;
   color: #373f51;
@@ -209,5 +209,33 @@ p.active::after {
   }
   to {
     bottom: 0;
+  }
+}
+
+@media(max-width: 550px) {
+  .input-form input {
+    width: 370px;
+  }
+
+  .todo-list-header > p {
+    width: 140px;
+  }
+
+  .content {
+    width: 270px;
+  }
+}
+
+@media(max-width: 320px) {
+  .input-form input {
+    width: 250px;
+  }
+
+  .todo-list-header > p {
+    width: 100px;
+  }
+
+  .content {
+    width: 160px;
   }
 }

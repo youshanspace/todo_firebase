@@ -1,6 +1,6 @@
 import {useDispatch} from 'react-redux';
 import {useState} from "react";
-import {addTodo} from '../store/todosSlice';
+import {addTodo} from '../store';
 import {IoAdd} from "react-icons/io5";
 
 function InputForm() {
