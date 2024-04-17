@@ -31,9 +31,7 @@ function LoginPage() {
         <div>
           <p>An todo web app.</p>
         </div>
-        <div className='login-button'>
-          <button onClick={handleLogin}>Login with Google</button>
-        </div>
+        <button onClick={handleLogin}>Login with Google</button>
       </div>
     </div>
   );

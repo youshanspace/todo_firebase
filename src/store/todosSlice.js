@@ -15,7 +15,7 @@ import { logout } from './userSlice';
 // To FireStore
 export const fetchTodos = createAsyncThunk('todos/fetch', async () => {
   let todos = [];
-  const q = query(collection(database, 'todos'), orderBy('createdTime', 'asc'));
+  const q = query(collection(database, 'todos'), orderBy('createdTime'));
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((doc) => {
     todos.push({ id: doc.id, ...doc.data() });

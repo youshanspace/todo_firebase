@@ -27,7 +27,7 @@ function App() {
         );
       }
     });
-    return unscribe;
+    return () => unscribe();
   }, []);
 
   const router = createBrowserRouter([

@@ -8,7 +8,7 @@ import {
   removeTodoFromStore,
 } from '../store';
 import { database } from '../firebase/firebase';
-import { collection, query, onSnapshot } from 'firebase/firestore';
+import { collection, query, onSnapshot, orderBy } from 'firebase/firestore';
 import InputForm from '../components/InputForm';
 import TodoList from '../components/TodoList';
 import Header from '../components/Header';
@@ -17,15 +17,15 @@ function TodosPage() {
   const dispatch = useDispatch();
   const uid = useSelector((state) => state.user.data.uid);
   const firstFetch = useSelector((state) => state.todos.firstFetch);
-  const isLoading = useSelector((state) => state.todos.firstFetch);
+  const isLoading = useSelector((state) => state.todos.isLoading);
   const navigate = useNavigate();
   let location = useLocation();
 
   useEffect(() => {
     // login && path is /todos
     if (uid && location.pathname === '/todos') {
-      const q = query(collection(database, 'todos'));
-      onSnapshot(q, (snapshot) => {
+      const q = query(collection(database, 'todos'), orderBy('createdTime'));
+      const unsuscribe = onSnapshot(q, (snapshot) => {
         for (let change of snapshot.docChanges()) {
           let changeType = change.type;
           switch (changeType) {
@@ -58,6 +58,7 @@ function TodosPage() {
           }
         }
       });
+      return () => unsuscribe();
     } else if (!uid && location.pathname === '/todos') {
       // logout
       navigate('/', { replace: true });
