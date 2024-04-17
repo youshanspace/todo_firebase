@@ -1,10 +1,34 @@
-import {configureStore} from "@reduxjs/toolkit";
-import {todosReducer, fetchTodos, addTodo, editTodo, deleteTodo, addTodoToStore, updateTodoToStore, removeTodoFromStore} from "./todosSlice";
+import { configureStore } from '@reduxjs/toolkit';
+import {
+  todosReducer,
+  fetchTodos,
+  addTodo,
+  editTodo,
+  deleteTodo,
+  addTodoToStore,
+  updateTodoToStore,
+  removeTodoFromStore,
+  resetState,
+} from './todosSlice';
+import { userReducer, login, logout, setLogin } from './userSlice';
 
 export const store = configureStore({
   reducer: {
-    todos: todosReducer
-  }
-})
+    user: userReducer,
+    todos: todosReducer,
+  },
+});
 
-export {fetchTodos, addTodo, editTodo, deleteTodo, addTodoToStore, updateTodoToStore, removeTodoFromStore};
+export {
+  login,
+  logout,
+  setLogin,
+  fetchTodos,
+  addTodo,
+  editTodo,
+  deleteTodo,
+  addTodoToStore,
+  updateTodoToStore,
+  removeTodoFromStore,
+  resetState,
+};

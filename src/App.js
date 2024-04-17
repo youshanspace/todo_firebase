@@ -1,52 +1,47 @@
-import {useEffect} from "react";
-import {useDispatch, useSelector} from 'react-redux';
-import {fetchTodos, addTodoToStore, updateTodoToStore, removeTodoFromStore} from "./store";
-import {database} from "./firebase/firebase";
-import {collection, query, onSnapshot} from "firebase/firestore";
-import InputForm from "./components/InputForm";
-import TodoList from "./components/TodoList";
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth, provider } from './firebase/firebase';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import LoginPage from './pages/LoginPage';
+import TodosPage from './pages/TodosPage';
+import ErrorPage from './pages/ErrorPage';
+import { fetchTodos, resetState, setLogin } from './store';
 
 function App() {
   const dispatch = useDispatch();
-  const firstFetch = useSelector(state => state.todos.firstFetch);
+  const firstFetch = useSelector((state) => state.todos.firstFetch);
 
   useEffect(() => {
-    const q = query(collection(database, "todos"));
-    onSnapshot(q, (snapshot) => {
-      for(let change of snapshot.docChanges()) {
-        let changeType = change.type;
-        switch(changeType) {
-          case 'added':
-            if(firstFetch) {
-              dispatch(fetchTodos());
-            } else {
-              let { title, createdTime, completed } = { ...change.doc.data() }
-              const todo = { id: change.doc.id, title, completed, createdTime };
-              dispatch(addTodoToStore(todo));
-            }
-            break;
-          case 'modified':
-            let { title, createdTime, completed } = { ...change.doc.data() }
-            const todo = { id: change.doc.id, title, completed, createdTime };
-            dispatch(updateTodoToStore(todo));
-            break;
-          case 'removed':
-            dispatch(removeTodoFromStore(change.doc.id));
-            break;
-          default:
-            break;
-        }
-        
+    const unscribe = onAuthStateChanged(auth, (user) => {
+      // refresh
+      if (user && !firstFetch) {
+        dispatch(resetState());
+        dispatch(
+          setLogin({
+            uid: user.uid,
+            name: user.displayName,
+            imgURL: user.photoURL,
+            email: user.email,
+          })
+        );
       }
     });
-  }, [dispatch, firstFetch])
+    return unscribe;
+  }, []);
 
-  return (
-    <>
-      <InputForm />
-      <TodoList />
-    </>
-  );
+  const router = createBrowserRouter([
+    {
+      path: '/',
+      errorElement: <ErrorPage />,
+      children: [
+        { index: true, element: <LoginPage /> },
+        { path: '/todos', element: <TodosPage /> },
+      ],
+    },
+  ]);
+
+  return <RouterProvider router={router} />;
 }
 
 export default App;
