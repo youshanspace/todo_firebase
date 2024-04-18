@@ -10,7 +10,7 @@ import {
   query,
   orderBy,
 } from 'firebase/firestore';
-import { logout } from './userSlice';
+import { setUser, logout } from './userSlice';
 
 // To FireStore
 export const fetchTodos = createAsyncThunk('todos/fetch', async () => {
@@ -20,6 +20,9 @@ export const fetchTodos = createAsyncThunk('todos/fetch', async () => {
   querySnapshot.forEach((doc) => {
     todos.push({ id: doc.id, ...doc.data() });
   });
+  await new Promise((resolve) => {
+    setTimeout(resolve, 200);
+  });
   return todos;
 });
 
@@ -28,8 +31,8 @@ export const addTodo = createAsyncThunk('todos/add', async (todo) => {
     const ref = await addDoc(collection(database, 'todos'), todo);
     const newTodo = { id: ref.id, ...todo };
     return newTodo;
-  } catch (err) {
-    console.log(err);
+  } catch (e) {
+    console.error('Error adding todo: ', e);
   }
 });
 
@@ -53,25 +56,31 @@ export const deleteTodo = createAsyncThunk('todos/delete', async (id) => {
 });
 
 // Firestore snapshot to Store
-export const addTodoToStore = createAsyncThunk(
-  'todos/addTodoToStore',
+export const syncAddTodo = createAsyncThunk('todos/syncAdd', async (todo) => {
+  const newTodo = { ...todo };
+  await new Promise((resolve) => {
+    setTimeout(resolve, 500);
+  });
+  return newTodo;
+});
+
+export const syncUpdateTodo = createAsyncThunk(
+  'todos/syncUpdate',
   async (todo) => {
     const newTodo = { ...todo };
+    await new Promise((resolve) => {
+      setTimeout(resolve, 500);
+    });
     return newTodo;
   }
 );
 
-export const updateTodoToStore = createAsyncThunk(
-  'todos/updateTodoToStore',
-  async (todo) => {
-    const newTodo = { ...todo };
-    return newTodo;
-  }
-);
-
-export const removeTodoFromStore = createAsyncThunk(
-  'todos/removeTodoFromStore',
+export const syncDeleteTodo = createAsyncThunk(
+  'todos/syncDelete',
   async (id) => {
+    await new Promise((resolve) => {
+      setTimeout(resolve, 500);
+    });
     return id;
   }
 );
@@ -80,49 +89,79 @@ const todosSlice = createSlice({
   name: 'todos',
   initialState: {
     isLoading: false,
+    isSyncing: false,
+    isReloading: true,
     firstFetch: false,
     data: [],
   },
   reducers: {
-    resetState(state, action) {
+    resetTodos(state) {
       state.data = [];
+    },
+    setIsReloading(state, action) {
+      state.isLoading = action.payload;
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchTodos.pending, (state) => {
+    builder.addCase(fetchTodos.pending, (state, action) => {
       state.isLoading = true;
     });
     builder.addCase(fetchTodos.fulfilled, (state, action) => {
       state.isLoading = false;
       state.firstFetch = true;
       state.data = action.payload;
+      state.isReloading = false;
     });
     builder.addCase(fetchTodos.rejected, (state, action) => {
       state.isLoading = false;
       state.firstFetch = true;
+      state.isReloading = false;
     });
-    builder.addCase(addTodo.fulfilled, (state, action) => {
-      // state.data.push(action.payload);
+    builder.addCase(addTodo.fulfilled, () => {});
+    builder.addCase(editTodo.fulfilled, () => {});
+    builder.addCase(deleteTodo.fulfilled, () => {});
+    builder.addCase(syncAddTodo.pending, (state, action) => {
+      state.isSyncing = true;
     });
-    builder.addCase(editTodo.fulfilled, (state, action) => {
-      // const newBook = action.payload;
-    });
-    builder.addCase(deleteTodo.fulfilled, (state, action) => {
-      // state.data = state.data.filter((todo) => todo.id !== action.payload);
-    });
-    builder.addCase(addTodoToStore.fulfilled, (state, action) => {
+    builder.addCase(syncAddTodo.fulfilled, (state, action) => {
       state.data.push(action.payload);
+      state.isSyncing = false;
     });
-    builder.addCase(updateTodoToStore.fulfilled, (state, action) => {
+    builder.addCase(syncAddTodo.rejected, (state, action) => {
+      state.data.push(action.payload);
+      state.isSyncing = false;
+    });
+    builder.addCase(syncUpdateTodo.pending, (state, action) => {
+      state.isSyncing = true;
+    });
+    builder.addCase(syncUpdateTodo.fulfilled, (state, action) => {
       state.data = state.data.map((todo) => {
         if (todo.id === action.payload.id) {
           return { ...action.payload };
         }
         return todo;
       });
+      state.isSyncing = false;
     });
-    builder.addCase(removeTodoFromStore.fulfilled, (state, action) => {
+    builder.addCase(syncUpdateTodo.rejected, (state, action) => {
+      state.data = state.data.map((todo) => {
+        if (todo.id === action.payload.id) {
+          return { ...action.payload };
+        }
+        return todo;
+      });
+      state.isSyncing = false;
+    });
+    builder.addCase(syncDeleteTodo.pending, (state, action) => {
+      state.isSyncing = true;
+    });
+    builder.addCase(syncDeleteTodo.fulfilled, (state, action) => {
       state.data = state.data.filter((todo) => todo.id !== action.payload);
+      state.isSyncing = false;
+    });
+    builder.addCase(syncDeleteTodo.rejected, (state, action) => {
+      state.data = state.data.filter((todo) => todo.id !== action.payload);
+      state.isSyncing = false;
     });
     builder.addCase(logout.fulfilled, (state) => {
       state.firstFetch = false;
@@ -132,8 +171,17 @@ const todosSlice = createSlice({
       state.firstFetch = false;
       state.data = [];
     });
+    // builder.addCase(setUser.pending, (state) => {
+    //   state.isReloading = true;
+    // });
+    // builder.addCase(setUser.fulfilled, (state) => {
+    //   state.isReloading = true;
+    // });
+    // builder.addCase(setUser.rejected, (state) => {
+    //   state.isReloading = true;
+    // });
   },
 });
 
-export const { resetState } = todosSlice.actions;
+export const { resetTodos, setIsReloading } = todosSlice.actions;
 export const todosReducer = todosSlice.reducer;

@@ -5,23 +5,31 @@ import { auth, provider } from '../firebase/firebase';
 export const login = createAsyncThunk('user/login', async () => {
   const result = await signInWithPopup(auth, provider);
   const user = result.user;
-  if (user) {
-    return {
-      uid: user.uid,
-      name: user.displayName,
-      imgURL: user.photoURL,
-      email: user.email,
-    };
-  }
+  return {
+    uid: user.uid,
+    name: user.displayName,
+    imgURL: user.photoURL,
+    email: user.email,
+  };
 });
 
 export const logout = createAsyncThunk('user/logout', async () => {
   await signOut(auth);
 });
 
+export const setUser = createAsyncThunk('user/setUser', async (user) => {
+  console.log(user);
+  await new Promise((resolve) => {
+    setTimeout(resolve, 1000);
+  });
+  return { ...user };
+});
+
 const userSlice = createSlice({
   name: 'user',
   initialState: {
+    nextPath: '',
+    isLogin: false,
     data: {
       uid: null,
       name: null,
@@ -30,15 +38,17 @@ const userSlice = createSlice({
     },
   },
   reducers: {
-    setLogin(state, action) {
-      state.data = { ...action.payload };
+    setNextPath(state, action) {
+      state.nextPath = action.payload;
     },
   },
   extraReducers: (builder) => {
     builder.addCase(login.fulfilled, (state, action) => {
+      state.isLogin = true;
       state.data = { ...action.payload };
     });
     builder.addCase(logout.fulfilled, (state, action) => {
+      state.isLogin = false;
       state.data = {
         uid: null,
         name: null,
@@ -46,8 +56,16 @@ const userSlice = createSlice({
         email: null,
       };
     });
+    builder.addCase(setUser.fulfilled, (state, action) => {
+      state.isLogin = true;
+      state.data = { ...action.payload };
+    });
+    builder.addCase(setUser.rejected, (state, action) => {
+      state.isLogin = true;
+      state.data = { ...action.payload };
+    });
   },
 });
 
-export const { setLogin } = userSlice.actions;
+export const { setNextPath } = userSlice.actions;
 export const userReducer = userSlice.reducer;

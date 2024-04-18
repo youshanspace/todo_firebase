@@ -3,27 +3,37 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import {
   fetchTodos,
-  addTodoToStore,
-  updateTodoToStore,
-  removeTodoFromStore,
+  resetTodos,
+  setIsReloading,
+  setNextPath,
+  syncAddTodo,
+  syncDeleteTodo,
+  syncUpdateTodo,
 } from '../store';
 import { database } from '../firebase/firebase';
 import { collection, query, onSnapshot, orderBy } from 'firebase/firestore';
 import InputForm from '../components/InputForm';
 import TodoList from '../components/TodoList';
 import Header from '../components/Header';
+import LoadingPage from './LoadingPage';
 
 function TodosPage() {
   const dispatch = useDispatch();
-  const uid = useSelector((state) => state.user.data.uid);
-  const firstFetch = useSelector((state) => state.todos.firstFetch);
-  const isLoading = useSelector((state) => state.todos.isLoading);
   const navigate = useNavigate();
   let location = useLocation();
+  const isLogin = useSelector((state) => state.user.isLogin);
+  const nextPath = useSelector((state) => state.user.nextPath);
+  const firstFetch = useSelector((state) => state.todos.firstFetch);
+  const isLoading = useSelector((state) => state.todos.isLoading);
+  const isSyncing = useSelector((state) => state.todos.isSyncing);
+  const isReloading = useSelector((state) => state.todos.isReloading);
 
   useEffect(() => {
     // login && path is /todos
-    if (uid && location.pathname === '/todos') {
+    if (isLogin && location.pathname === '/todos') {
+      if (nextPath === '/reload') {
+        dispatch(resetTodos());
+      }
       const q = query(collection(database, 'todos'), orderBy('createdTime'));
       const unsuscribe = onSnapshot(q, (snapshot) => {
         for (let change of snapshot.docChanges()) {
@@ -32,6 +42,7 @@ function TodosPage() {
             case 'added':
               if (firstFetch) {
                 dispatch(fetchTodos());
+                dispatch(setNextPath(''));
               } else {
                 let { title, createdTime, completed } = {
                   ...change.doc.data(),
@@ -42,16 +53,23 @@ function TodosPage() {
                   completed,
                   createdTime,
                 };
-                dispatch(addTodoToStore(todo));
+                dispatch(syncAddTodo(todo));
               }
               break;
             case 'modified':
-              let { title, createdTime, completed } = { ...change.doc.data() };
-              const todo = { id: change.doc.id, title, completed, createdTime };
-              dispatch(updateTodoToStore(todo));
+              let { title, createdTime, completed } = {
+                ...change.doc.data(),
+              };
+              const todo = {
+                id: change.doc.id,
+                title,
+                completed,
+                createdTime,
+              };
+              dispatch(syncUpdateTodo(todo));
               break;
             case 'removed':
-              dispatch(removeTodoFromStore(change.doc.id));
+              dispatch(syncDeleteTodo(change.doc.id));
               break;
             default:
               break;
@@ -59,19 +77,22 @@ function TodosPage() {
         }
       });
       return () => unsuscribe();
-    } else if (!uid && location.pathname === '/todos') {
-      // logout
+    } else if (!isLogin && location.pathname === '/todos' && nextPath === '/') {
       navigate('/', { replace: true });
     }
-  }, [uid, firstFetch, navigate]);
+  }, [isLogin]);
 
-  return (
-    <>
-      <Header />
-      <InputForm />
-      <TodoList />
-    </>
-  );
+  if (isReloading) {
+    return <LoadingPage />;
+  } else {
+    return (
+      <>
+        <Header />
+        <InputForm />
+        <TodoList />
+      </>
+    );
+  }
 }
 
 export default TodosPage;

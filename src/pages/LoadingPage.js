@@ -1,5 +1,9 @@
 function LoadingPage() {
-  return <div className='loading-page'>LoadingPage</div>;
+  return (
+    <div className='loading-page'>
+      <div className='loader'></div>
+    </div>
+  );
 }
 
 export default LoadingPage;

@@ -5,12 +5,13 @@ import {
   addTodo,
   editTodo,
   deleteTodo,
-  addTodoToStore,
-  updateTodoToStore,
-  removeTodoFromStore,
-  resetState,
+  syncAddTodo,
+  syncUpdateTodo,
+  syncDeleteTodo,
+  resetTodos,
+  setIsReloading,
 } from './todosSlice';
-import { userReducer, login, logout, setLogin } from './userSlice';
+import { userReducer, login, logout, setUser, setNextPath } from './userSlice';
 
 export const store = configureStore({
   reducer: {
@@ -22,13 +23,15 @@ export const store = configureStore({
 export {
   login,
   logout,
-  setLogin,
+  setUser,
+  setNextPath,
   fetchTodos,
   addTodo,
   editTodo,
   deleteTodo,
-  addTodoToStore,
-  updateTodoToStore,
-  removeTodoFromStore,
-  resetState,
+  syncAddTodo,
+  syncUpdateTodo,
+  syncDeleteTodo,
+  resetTodos,
+  setIsReloading,
 };

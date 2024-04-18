@@ -6,16 +6,17 @@ import { PiNotePencilBold } from 'react-icons/pi';
 
 function LoginPage() {
   const dispatch = useDispatch();
-  const uid = useSelector((state) => state.user.data.uid);
   const navigate = useNavigate();
   let location = useLocation();
+  const isLogin = useSelector((state) => state.user.isLogin);
+  const nextPath = useSelector((state) => state.user.nextPath);
 
   useEffect(() => {
     // login -> to /todos
-    if (uid && location.pathname === '/') {
+    if (isLogin && location.pathname === '/' && nextPath === '/todos') {
       navigate('/todos');
     }
-  }, [uid]);
+  }, [isLogin, nextPath]);
 
   const handleLogin = () => {
     dispatch(login());

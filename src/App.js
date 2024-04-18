@@ -1,34 +1,42 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
-import { auth, provider } from './firebase/firebase';
+import { auth } from './firebase/firebase';
+import { setIsReloading, setNextPath, setUser } from './store';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import TodosPage from './pages/TodosPage';
 import ErrorPage from './pages/ErrorPage';
-import { fetchTodos, resetState, setLogin } from './store';
 
 function App() {
   const dispatch = useDispatch();
-  const firstFetch = useSelector((state) => state.todos.firstFetch);
+  const isLogin = useSelector((state) => state.user.isLogin);
 
   useEffect(() => {
     const unscribe = onAuthStateChanged(auth, (user) => {
-      // refresh
-      if (user && !firstFetch) {
-        dispatch(resetState());
+      // refresh: user should be login
+      if (user && !isLogin && window.location.pathname === '/todos') {
+        dispatch(setNextPath('/reload'));
         dispatch(
-          setLogin({
+          setUser({
             uid: user.uid,
             name: user.displayName,
             imgURL: user.photoURL,
             email: user.email,
           })
         );
+      } else if (user && isLogin) {
+        // login
+        dispatch(setNextPath('/todos'));
+      } else if (!user) {
+        // logout
+        dispatch(setNextPath('/'));
       }
     });
-    return () => unscribe();
-  }, []);
+    return () => {
+      unscribe();
+    };
+  }, [isLogin]);
 
   const router = createBrowserRouter([
     {
