@@ -10,7 +10,6 @@ import { FaRegUser } from 'react-icons/fa6';
 import { BiLogoGmail } from 'react-icons/bi';
 import { FiLogOut } from 'react-icons/fi';
 import userImgURL from '../images/user.png';
-import { useNavigate } from 'react-router-dom';
 
 function Header() {
   const [isOpen, setIsOpen] = useState(false);

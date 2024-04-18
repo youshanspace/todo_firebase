@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import { login } from '../store/userSlice';
 import { PiNotePencilBold } from 'react-icons/pi';
+import { fetchTodos } from '../store';
 
 function LoginPage() {
   const dispatch = useDispatch();
@@ -20,6 +21,7 @@ function LoginPage() {
 
   const handleLogin = () => {
     dispatch(login());
+    dispatch(fetchTodos());
   };
 
   return (

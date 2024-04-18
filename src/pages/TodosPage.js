@@ -40,10 +40,7 @@ function TodosPage() {
           let changeType = change.type;
           switch (changeType) {
             case 'added':
-              if (firstFetch) {
-                dispatch(fetchTodos());
-                dispatch(setNextPath(''));
-              } else {
+              if (!firstFetch) {
                 let { title, createdTime, completed } = {
                   ...change.doc.data(),
                 };

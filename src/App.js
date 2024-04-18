@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase/firebase';
-import { setIsReloading, setNextPath, setUser } from './store';
+import { fetchTodos, setIsReloading, setNextPath, setUser } from './store';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import TodosPage from './pages/TodosPage';
@@ -14,7 +14,7 @@ function App() {
 
   useEffect(() => {
     const unscribe = onAuthStateChanged(auth, (user) => {
-      // refresh: user should be login
+      // reload: user should be login
       if (user && !isLogin && window.location.pathname === '/todos') {
         dispatch(setNextPath('/reload'));
         dispatch(
@@ -25,6 +25,7 @@ function App() {
             email: user.email,
           })
         );
+        dispatch(fetchTodos());
       } else if (user && isLogin) {
         // login
         dispatch(setNextPath('/todos'));

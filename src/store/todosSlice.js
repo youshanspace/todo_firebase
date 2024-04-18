@@ -10,7 +10,7 @@ import {
   query,
   orderBy,
 } from 'firebase/firestore';
-import { setUser, logout } from './userSlice';
+import { logout } from './userSlice';
 
 // To FireStore
 export const fetchTodos = createAsyncThunk('todos/fetch', async () => {
@@ -21,7 +21,7 @@ export const fetchTodos = createAsyncThunk('todos/fetch', async () => {
     todos.push({ id: doc.id, ...doc.data() });
   });
   await new Promise((resolve) => {
-    setTimeout(resolve, 200);
+    setTimeout(resolve, 1000);
   });
   return todos;
 });
@@ -59,7 +59,7 @@ export const deleteTodo = createAsyncThunk('todos/delete', async (id) => {
 export const syncAddTodo = createAsyncThunk('todos/syncAdd', async (todo) => {
   const newTodo = { ...todo };
   await new Promise((resolve) => {
-    setTimeout(resolve, 500);
+    setTimeout(resolve, 0);
   });
   return newTodo;
 });
@@ -69,7 +69,7 @@ export const syncUpdateTodo = createAsyncThunk(
   async (todo) => {
     const newTodo = { ...todo };
     await new Promise((resolve) => {
-      setTimeout(resolve, 500);
+      setTimeout(resolve, 0);
     });
     return newTodo;
   }
@@ -79,7 +79,7 @@ export const syncDeleteTodo = createAsyncThunk(
   'todos/syncDelete',
   async (id) => {
     await new Promise((resolve) => {
-      setTimeout(resolve, 500);
+      setTimeout(resolve, 0);
     });
     return id;
   }
@@ -171,15 +171,6 @@ const todosSlice = createSlice({
       state.firstFetch = false;
       state.data = [];
     });
-    // builder.addCase(setUser.pending, (state) => {
-    //   state.isReloading = true;
-    // });
-    // builder.addCase(setUser.fulfilled, (state) => {
-    //   state.isReloading = true;
-    // });
-    // builder.addCase(setUser.rejected, (state) => {
-    //   state.isReloading = true;
-    // });
   },
 });
 
