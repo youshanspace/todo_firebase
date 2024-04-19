@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase/firebase';
-import { fetchTodos, setIsReloading, setNextPath, setUser } from './store';
+import { fetchTodos, setNextPath, setUser } from './store';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import TodosPage from './pages/TodosPage';

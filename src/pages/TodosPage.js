@@ -2,10 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import {
-  fetchTodos,
   resetTodos,
-  setIsReloading,
-  setNextPath,
   syncAddTodo,
   syncDeleteTodo,
   syncUpdateTodo,
@@ -23,9 +20,7 @@ function TodosPage() {
   let location = useLocation();
   const isLogin = useSelector((state) => state.user.isLogin);
   const nextPath = useSelector((state) => state.user.nextPath);
-  const firstFetch = useSelector((state) => state.todos.firstFetch);
   const isLoading = useSelector((state) => state.todos.isLoading);
-  const isSyncing = useSelector((state) => state.todos.isSyncing);
   const isReloading = useSelector((state) => state.todos.isReloading);
 
   useEffect(() => {
@@ -39,20 +34,19 @@ function TodosPage() {
         for (let change of snapshot.docChanges()) {
           let changeType = change.type;
           switch (changeType) {
-            case 'added':
-              if (!firstFetch) {
-                let { title, createdTime, completed } = {
-                  ...change.doc.data(),
-                };
-                const todo = {
-                  id: change.doc.id,
-                  title,
-                  completed,
-                  createdTime,
-                };
-                dispatch(syncAddTodo(todo));
-              }
+            case 'added': {
+              let { title, createdTime, completed } = {
+                ...change.doc.data(),
+              };
+              const todo = {
+                id: change.doc.id,
+                title,
+                completed,
+                createdTime,
+              };
+              dispatch(syncAddTodo(todo));
               break;
+            }
             case 'modified':
               let { title, createdTime, completed } = {
                 ...change.doc.data(),
@@ -79,7 +73,7 @@ function TodosPage() {
     }
   }, [isLogin]);
 
-  if (isReloading) {
+  if (isReloading || isLoading) {
     return <LoadingPage />;
   } else {
     return (

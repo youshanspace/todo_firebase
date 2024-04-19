@@ -98,9 +98,6 @@ const todosSlice = createSlice({
     resetTodos(state) {
       state.data = [];
     },
-    setIsReloading(state, action) {
-      state.isLoading = action.payload;
-    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchTodos.pending, (state, action) => {
@@ -124,11 +121,17 @@ const todosSlice = createSlice({
       state.isSyncing = true;
     });
     builder.addCase(syncAddTodo.fulfilled, (state, action) => {
-      state.data.push(action.payload);
+      const found = state.data.some((todo) => todo.id === action.payload.id);
+      if (!found) {
+        state.data.push(action.payload);
+      }
       state.isSyncing = false;
     });
     builder.addCase(syncAddTodo.rejected, (state, action) => {
-      state.data.push(action.payload);
+      const found = state.data.some((todo) => todo.id === action.payload.id);
+      if (!found) {
+        state.data.push(action.payload);
+      }
       state.isSyncing = false;
     });
     builder.addCase(syncUpdateTodo.pending, (state, action) => {

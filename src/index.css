@@ -107,7 +107,8 @@ button {
   cursor: pointer;
 }
 
-.dropdown-container:hover {
+.dropdown-container:hover,
+.dropdown-container:active {
   box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
     rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
   background: rgba(172, 172, 172, 0.3);
@@ -447,13 +448,14 @@ button {
 }
 
 .loader {
-  border: 16px solid #fff;
-  border-top: 16px solid #6d59bd;
-  border-radius: 50%;
-  margin: auto;
   width: 120px;
-  height: 120px;
-  animation: spin 2s linear infinite;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(farthest-side, #907fd5 90%, #0000) top/12px 12px
+      no-repeat,
+    conic-gradient(#0000 30%, #907fd5);
+  -webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - 12px), #000 0);
+  animation: spin 1s infinite linear;
 }
 
 @keyframes move {
@@ -466,11 +468,8 @@ button {
 }
 
 @keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
   100% {
-    transform: rotate(360deg);
+    transform: rotate(1turn);
   }
 }
 

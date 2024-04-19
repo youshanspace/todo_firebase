@@ -4,8 +4,11 @@ import { useEffect } from 'react';
 import { login } from '../store/userSlice';
 import { PiNotePencilBold } from 'react-icons/pi';
 import { fetchTodos } from '../store';
+import { useThunk } from '../hooks/use-thunk';
 
 function LoginPage() {
+  const [doFetchTodos, isLoadingTodos, loadingTodosError] =
+    useThunk(fetchTodos);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   let location = useLocation();
@@ -21,23 +24,27 @@ function LoginPage() {
 
   const handleLogin = () => {
     dispatch(login());
-    dispatch(fetchTodos());
+    doFetchTodos();
   };
 
-  return (
-    <div className='login-page'>
-      <div className='login-container'>
-        <h1>
-          <PiNotePencilBold />
-          Todos
-        </h1>
-        <div>
-          <p>An todo web app.</p>
+  if (isLoadingTodos) {
+    return <LoginPage />;
+  } else {
+    return (
+      <div className='login-page'>
+        <div className='login-container'>
+          <h1>
+            <PiNotePencilBold />
+            Todos
+          </h1>
+          <div>
+            <p>An todo web app.</p>
+          </div>
+          <button onClick={handleLogin}>Login with Google</button>
         </div>
-        <button onClick={handleLogin}>Login with Google</button>
       </div>
-    </div>
-  );
+    );
+  }
 }
 
 export default LoginPage;

@@ -18,7 +18,6 @@ export const logout = createAsyncThunk('user/logout', async () => {
 });
 
 export const setUser = createAsyncThunk('user/setUser', async (user) => {
-  console.log(user);
   await new Promise((resolve) => {
     setTimeout(resolve, 1000);
   });
