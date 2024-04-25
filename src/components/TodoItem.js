@@ -1,14 +1,14 @@
-import {useState} from "react";
-import {useDispatch} from 'react-redux';
-import {MdModeEdit, MdDelete} from "react-icons/md";
-import {editTodo, deleteTodo} from "../store";
-import TodoEdit from "./TodoEdit";
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { MdModeEdit, MdDelete } from 'react-icons/md';
+import { editTodo, deleteTodo } from '../store';
+import TodoEdit from './TodoEdit';
 
-function TodoItem({todo}) {
+function TodoItem({ todo }) {
   const dispatch = useDispatch();
   const [isCompleted, setIsCompleted] = useState(todo.completed);
   const [edit, setEdit] = useState(false);
-  
+
   const handleTitleEdit = () => {
     setEdit(!edit);
   };
@@ -18,7 +18,7 @@ function TodoItem({todo}) {
   };
 
   const handleCheckboxChange = () => {
-    const updatedTodo = {...todo, completed: !isCompleted};
+    const updatedTodo = { ...todo, completed: !isCompleted };
     dispatch(editTodo(updatedTodo));
     setIsCompleted(!isCompleted);
   };
@@ -33,18 +33,8 @@ function TodoItem({todo}) {
   }
 
   return (
-    <div
-      className={
-        todo.completed
-          ? "todo-item-container is-completed"
-          : "todo-item-container"
-      }
-    >
-      <input
-        type="checkbox"
-        onChange={handleCheckboxChange}
-        checked={todo.completed}
-      />
+    <div className={todo.completed ? 'todo-item-container is-completed' : 'todo-item-container'}>
+      <input type="checkbox" onChange={handleCheckboxChange} checked={todo.completed} />
       <div className="content">{editContent}</div>
       <div className="actions">
         <button onClick={handleTitleEdit}>

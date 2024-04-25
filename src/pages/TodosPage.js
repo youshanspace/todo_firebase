@@ -1,12 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
-import {
-  resetTodos,
-  syncAddTodo,
-  syncDeleteTodo,
-  syncUpdateTodo,
-} from '../store';
+import { resetTodos, syncAddTodo, syncDeleteTodo, syncUpdateTodo } from '../store';
 import { database } from '../firebase/firebase';
 import { collection, query, onSnapshot, orderBy } from 'firebase/firestore';
 import InputForm from '../components/InputForm';

@@ -23,7 +23,7 @@ function App() {
             name: user.displayName,
             imgURL: user.photoURL,
             email: user.email,
-          })
+          }),
         );
         dispatch(fetchTodos());
       } else if (user && isLogin) {

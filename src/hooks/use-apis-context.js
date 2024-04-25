@@ -1,5 +1,5 @@
-import {useContext} from "react";
-import ApisContext from "../context/api";
+import { useContext } from 'react';
+import ApisContext from '../context/api';
 
 function useApisContext() {
   return useContext(ApisContext);

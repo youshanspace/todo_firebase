@@ -1,15 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { database } from '../firebase/firebase';
-import {
-  collection,
-  doc,
-  getDocs,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  query,
-  orderBy,
-} from 'firebase/firestore';
+import { collection, doc, getDocs, addDoc, updateDoc, deleteDoc, query, orderBy } from 'firebase/firestore';
 import { logout } from './userSlice';
 
 // To FireStore
@@ -64,26 +55,20 @@ export const syncAddTodo = createAsyncThunk('todos/syncAdd', async (todo) => {
   return newTodo;
 });
 
-export const syncUpdateTodo = createAsyncThunk(
-  'todos/syncUpdate',
-  async (todo) => {
-    const newTodo = { ...todo };
-    await new Promise((resolve) => {
-      setTimeout(resolve, 0);
-    });
-    return newTodo;
-  }
-);
+export const syncUpdateTodo = createAsyncThunk('todos/syncUpdate', async (todo) => {
+  const newTodo = { ...todo };
+  await new Promise((resolve) => {
+    setTimeout(resolve, 0);
+  });
+  return newTodo;
+});
 
-export const syncDeleteTodo = createAsyncThunk(
-  'todos/syncDelete',
-  async (id) => {
-    await new Promise((resolve) => {
-      setTimeout(resolve, 0);
-    });
-    return id;
-  }
-);
+export const syncDeleteTodo = createAsyncThunk('todos/syncDelete', async (id) => {
+  await new Promise((resolve) => {
+    setTimeout(resolve, 0);
+  });
+  return id;
+});
 
 const todosSlice = createSlice({
   name: 'todos',

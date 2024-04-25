@@ -26,7 +26,9 @@ body {
   justify-content: space-evenly;
   align-items: center;
   border-radius: 10px;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  box-shadow:
+    0 3px 6px rgba(0, 0, 0, 0.16),
+    0 3px 6px rgba(0, 0, 0, 0.23);
   padding: 20px;
   width: 250px;
   height: 250px;
@@ -74,7 +76,9 @@ button {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  box-shadow:
+    0 3px 6px rgba(0, 0, 0, 0.16),
+    0 3px 6px rgba(0, 0, 0, 0.23);
   padding: 0 30px;
   width: 100%;
   height: 70px;
@@ -109,14 +113,16 @@ button {
 
 .dropdown-container:hover,
 .dropdown-container:active {
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+  box-shadow:
+    rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
     rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
   background: rgba(172, 172, 172, 0.3);
 }
 
 .dropdown-container figure {
   border-radius: 50%;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+  box-shadow:
+    rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
     rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
   height: 40px;
   width: 40px;
@@ -141,7 +147,9 @@ button {
   top: 53px;
   right: 0;
   border-radius: 10px;
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+  box-shadow:
+    rgba(0, 0, 0, 0.16) 0px 3px 6px,
+    rgba(0, 0, 0, 0.23) 0px 3px 6px;
   background: #f5f5f5;
 }
 
@@ -194,7 +202,8 @@ button {
   border: none;
   border-radius: 25px 0 0 25px;
   outline: none;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+  box-shadow:
+    rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
     rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
   padding: 0 20px;
   width: 490px;
@@ -205,7 +214,8 @@ button {
 .input-form button {
   border: none;
   border-radius: 0 25px 25px 0;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+  box-shadow:
+    rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
     rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
   width: 50px;
   height: 50px;
@@ -229,7 +239,9 @@ button {
 
 .todo-list-container {
   border-radius: 10px;
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+  box-shadow:
+    rgba(0, 0, 0, 0.16) 0px 3px 6px,
+    rgba(0, 0, 0, 0.23) 0px 3px 6px;
   background: rgba(256, 256, 256, 0.7);
   background-blend-mode: multiply;
   font-size: 16px;
@@ -384,7 +396,9 @@ button {
 .error-container {
   text-align: center;
   border-radius: 10px;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  box-shadow:
+    0 3px 6px rgba(0, 0, 0, 0.16),
+    0 3px 6px rgba(0, 0, 0, 0.23);
   padding: 50px 20px;
   width: 600px;
   background: hsla(0, 0%, 100%, 0.7);
@@ -451,8 +465,8 @@ button {
   width: 120px;
   aspect-ratio: 1;
   border-radius: 50%;
-  background: radial-gradient(farthest-side, #907fd5 90%, #0000) top/12px 12px
-      no-repeat,
+  background:
+    radial-gradient(farthest-side, #907fd5 90%, #0000) top/12px 12px no-repeat,
     conic-gradient(#0000 30%, #907fd5);
   -webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - 12px), #000 0);
   animation: spin 1s infinite linear;

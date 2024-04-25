@@ -25,14 +25,9 @@ function InputForm() {
   };
 
   return (
-    <form className='input-form' onSubmit={handelSubmit}>
-      <input
-        spellCheck='false'
-        placeholder='Add a new todo'
-        value={input}
-        onChange={handleChange}
-      />
-      <button type='submit'>
+    <form className="input-form" onSubmit={handelSubmit}>
+      <input spellCheck="false" placeholder="Add a new todo" value={input} onChange={handleChange} />
+      <button type="submit">
         <IoAdd />
       </button>
     </form>

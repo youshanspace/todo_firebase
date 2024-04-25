@@ -1,11 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../store/userSlice';
-import {
-  PiNotePencilBold,
-  PiCaretLeftBold,
-  PiCaretDownBold,
-} from 'react-icons/pi';
+import { PiNotePencilBold, PiCaretLeftBold, PiCaretDownBold } from 'react-icons/pi';
 import { FaRegUser } from 'react-icons/fa6';
 import { BiLogoGmail } from 'react-icons/bi';
 import { FiLogOut } from 'react-icons/fi';
@@ -37,29 +33,23 @@ function Header() {
   };
 
   return (
-    <header className='header-container'>
+    <header className="header-container">
       <h1>
         <PiNotePencilBold /> Todos
       </h1>
-      <div
-        className='dropdown-container'
-        ref={refElement}
-        onClick={handlePanelOpen}
-      >
+      <div className="dropdown-container" ref={refElement} onClick={handlePanelOpen}>
         <figure>
-          <img src={user.imgURL || userImgURL} alt='user profile' />
+          <img src={user.imgURL || userImgURL} alt="user profile" />
         </figure>
-        <span className='arrow-button'>
-          {isOpen ? <PiCaretDownBold /> : <PiCaretLeftBold />}
-        </span>
+        <span className="arrow-button">{isOpen ? <PiCaretDownBold /> : <PiCaretLeftBold />}</span>
         <div className={isOpen ? 'panel' : 'hide'}>
-          <div className='panel-name'>
+          <div className="panel-name">
             <FaRegUser /> {user.name}
           </div>
-          <div className='panel-email'>
+          <div className="panel-email">
             <BiLogoGmail /> {user.email}
           </div>
-          <div className='panel-logout' onClick={handleLogout}>
+          <div className="panel-logout" onClick={handleLogout}>
             <FiLogOut /> Logout
           </div>
         </div>

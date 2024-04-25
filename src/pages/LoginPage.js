@@ -7,8 +7,7 @@ import { fetchTodos } from '../store';
 import { useThunk } from '../hooks/use-thunk';
 
 function LoginPage() {
-  const [doFetchTodos, isLoadingTodos, loadingTodosError] =
-    useThunk(fetchTodos);
+  const [doFetchTodos, isLoadingTodos, loadingTodosError] = useThunk(fetchTodos);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   let location = useLocation();
@@ -31,8 +30,8 @@ function LoginPage() {
     return <LoginPage />;
   } else {
     return (
-      <div className='login-page'>
-        <div className='login-container'>
+      <div className="login-page">
+        <div className="login-container">
           <h1>
             <PiNotePencilBold />
             Todos

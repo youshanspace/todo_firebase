@@ -15,7 +15,7 @@ export function useThunk(thunk) {
         .catch((err) => setError(err))
         .finally(() => setIsLoading(false));
     },
-    [dispatch, thunk]
+    [dispatch, thunk],
   );
 
   return [runThunk, isLoading, error];
