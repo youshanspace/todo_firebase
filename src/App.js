@@ -13,30 +13,34 @@ function App() {
   const isLogin = useSelector((state) => state.user.isLogin);
 
   useEffect(() => {
-    const unscribe = onAuthStateChanged(auth, (user) => {
-      // reload: user should be login
-      if (user && !isLogin && window.location.pathname === '/todos') {
-        dispatch(setNextPath('/reload'));
-        dispatch(
-          setUser({
-            uid: user.uid,
-            name: user.displayName,
-            imgURL: user.photoURL,
-            email: user.email,
-          }),
-        );
-        dispatch(fetchTodos());
-      } else if (user && isLogin) {
+    let token = localStorage.getItem('token');
+    const unsuscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
         // login
-        dispatch(setNextPath('/todos'));
-      } else if (!user) {
+        if (!token && isLogin) {
+          localStorage.setItem('token', new Date().toISOString());
+          dispatch(fetchTodos());
+          dispatch(setNextPath('/todos'));
+        } else if (token && !isLogin) {
+          // reload
+          dispatch(setNextPath('/reload'));
+          dispatch(
+            setUser({
+              uid: user.uid,
+              name: user.displayName,
+              imgURL: user.photoURL,
+              email: user.email,
+            }),
+          );
+          dispatch(fetchTodos());
+        }
+      } else {
         // logout
+        localStorage.clear();
         dispatch(setNextPath('/'));
       }
     });
-    return () => {
-      unscribe();
-    };
+    return () => unsuscribe();
   }, [isLogin]);
 
   const router = createBrowserRouter([

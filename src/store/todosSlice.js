@@ -12,7 +12,7 @@ export const fetchTodos = createAsyncThunk('todos/fetch', async () => {
     todos.push({ id: doc.id, ...doc.data() });
   });
   await new Promise((resolve) => {
-    setTimeout(resolve, 1000);
+    setTimeout(resolve, 500);
   });
   return todos;
 });

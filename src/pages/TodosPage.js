@@ -19,6 +19,7 @@ function TodosPage() {
   const isReloading = useSelector((state) => state.todos.isReloading);
 
   useEffect(() => {
+    let token = localStorage.getItem('token');
     // login && path is /todos
     if (isLogin && location.pathname === '/todos') {
       if (nextPath === '/reload') {
@@ -63,7 +64,7 @@ function TodosPage() {
         }
       });
       return () => unsuscribe();
-    } else if (!isLogin && location.pathname === '/todos' && nextPath === '/') {
+    } else if (location.pathname === '/todos' && !token) {
       navigate('/', { replace: true });
     }
   }, [isLogin]);
