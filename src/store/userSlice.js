@@ -24,7 +24,6 @@ export const setUser = createAsyncThunk('user/setUser', async (user) => {
 const userSlice = createSlice({
   name: 'user',
   initialState: {
-    nextPath: '',
     isLogin: false,
     data: {
       uid: null,
@@ -33,11 +32,7 @@ const userSlice = createSlice({
       email: null,
     },
   },
-  reducers: {
-    setNextPath(state, action) {
-      state.nextPath = action.payload;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(login.fulfilled, (state, action) => {
       state.isLogin = true;
@@ -63,5 +58,4 @@ const userSlice = createSlice({
   },
 });
 
-export const { setNextPath } = userSlice.actions;
 export const userReducer = userSlice.reducer;

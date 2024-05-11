@@ -9,9 +9,8 @@ import {
   syncUpdateTodo,
   syncDeleteTodo,
   resetTodos,
-  setIsReloading,
 } from './todosSlice';
-import { userReducer, login, logout, setUser, setNextPath } from './userSlice';
+import { userReducer, login, logout, setUser } from './userSlice';
 
 export const store = configureStore({
   reducer: {
@@ -24,7 +23,6 @@ export {
   login,
   logout,
   setUser,
-  setNextPath,
   fetchTodos,
   addTodo,
   editTodo,
@@ -33,5 +31,4 @@ export {
   syncUpdateTodo,
   syncDeleteTodo,
   resetTodos,
-  setIsReloading,
 };

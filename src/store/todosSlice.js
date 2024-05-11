@@ -162,5 +162,5 @@ const todosSlice = createSlice({
   },
 });
 
-export const { resetTodos, setIsReloading } = todosSlice.actions;
+export const { resetTodos } = todosSlice.actions;
 export const todosReducer = todosSlice.reducer;

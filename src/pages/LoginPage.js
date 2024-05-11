@@ -1,24 +1,22 @@
-import { useSelector } from 'react-redux';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useEffect } from 'react';
-import { login } from '../store/userSlice';
-import { PiNotePencilBold } from 'react-icons/pi';
 import { useThunk } from '../hooks/use-thunk';
+import { login } from '../store/userSlice';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { PiNotePencilBold } from 'react-icons/pi';
 
 function LoginPage() {
   const [doLogin, isLoadingLogin, loadingLoginError] = useThunk(login);
-  const navigate = useNavigate();
-  let location = useLocation();
   const isLogin = useSelector((state) => state.user.isLogin);
-  const nextPath = useSelector((state) => state.user.nextPath);
+  const navigate = useNavigate();
 
   useEffect(() => {
     let token = localStorage.getItem('token');
-    // login -> to /todos
-    if (isLogin && token && location.pathname === '/') {
+    // reload
+    if (token && !isLogin) {
       navigate('/todos');
     }
-  }, [isLogin, nextPath]);
+  }, [isLogin, navigate]);
 
   const handleLogin = () => {
     doLogin();

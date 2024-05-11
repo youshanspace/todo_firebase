@@ -1,16 +1,14 @@
 import { useDispatch, useSelector } from 'react-redux';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase/firebase';
-import { fetchTodos, setNextPath, setUser } from './store';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import LoginPage from './pages/LoginPage';
-import TodosPage from './pages/TodosPage';
-import ErrorPage from './pages/ErrorPage';
+import { fetchTodos, resetTodos, setUser } from './store';
 
 function App() {
   const dispatch = useDispatch();
   const isLogin = useSelector((state) => state.user.isLogin);
+  const navigate = useNavigate();
 
   useEffect(() => {
     let token = localStorage.getItem('token');
@@ -20,10 +18,9 @@ function App() {
         if (!token && isLogin) {
           localStorage.setItem('token', new Date().toISOString());
           dispatch(fetchTodos());
-          dispatch(setNextPath('/todos'));
+          navigate('/todos');
         } else if (token && !isLogin) {
           // reload
-          dispatch(setNextPath('/reload'));
           dispatch(
             setUser({
               uid: user.uid,
@@ -32,29 +29,23 @@ function App() {
               email: user.email,
             }),
           );
+          dispatch(resetTodos());
           dispatch(fetchTodos());
         }
       } else {
         // logout
         localStorage.clear();
-        dispatch(setNextPath('/'));
+        navigate('/', { replace: true });
       }
     });
     return () => unsuscribe();
-  }, [isLogin]);
+  }, [isLogin, dispatch, navigate]);
 
-  const router = createBrowserRouter([
-    {
-      path: '/',
-      errorElement: <ErrorPage />,
-      children: [
-        { index: true, element: <LoginPage /> },
-        { path: '/todos', element: <TodosPage /> },
-      ],
-    },
-  ]);
-
-  return <RouterProvider router={router} />;
+  return (
+    <>
+      <Outlet />
+    </>
+  );
 }
 
 export default App;
